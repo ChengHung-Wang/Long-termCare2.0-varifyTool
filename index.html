@@ -21,6 +21,9 @@
 </head>
 <body>
     <div id="root">
+        <el-dialog width="80%" title="Management" :visible.sync="managementStatus.rootWindow">
+
+        </el-dialog>
         <div class="container">
             <div class="row fcc" style="height: 100vh;">
                 <div class="col-3 mt-3" v-if="!isTouchDevice()">
@@ -60,7 +63,6 @@
                                         v-if="!statusConfig.filter(e => e.id == active)[0].hasParent"
                                 >
                                     <el-table-column
-                                            label=""
                                             type="selection"
                                             width="55">
                                     </el-table-column>
@@ -101,6 +103,13 @@
                         <div class="control-button fbc">
                             <div>
                                 <el-button type="danger" icon="el-icon-delete" @click="reset()">reset</el-button>
+                                <el-button
+                                        v-if="!isTouchDevice()"
+                                        type="danger"
+                                        plain icon="el-icon-setting"
+                                        @click="managementStatus.rootWindow = true">
+                                    Management
+                                </el-button>
                             </div>
                             <div>
                                 <el-button
