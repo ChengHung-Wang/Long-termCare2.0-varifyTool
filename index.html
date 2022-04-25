@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>標題自己改</title>
+    <!--  JavaScript Library  -->
+    <script src="./js/jquery.slim.min.js"></script>
+    <script src="./js/bootstrap.bundle-4.6.1.min.js"></script>
+    <script src="./js/vue.js"></script>
+    <script src="./js/element-ui.js"></script>
+    <script src="./js/perfect-scrollbar.min.js"></script>
+    <!--  Style Library  -->
+    <link rel="stylesheet" href="./css/element-ui.css">
+    <link rel="stylesheet" href="./css/bootstrap-4.6.1.min.css">
+    <link rel="stylesheet" href="./css/perfect-scrollbar.css">
+    <!--  !important Data  -->
+    <script src="./config.js"></script>
+</head>
+<body>
+    <div id="root">
+        <div class="container">
+            <div class="row fcc" style="height: 100vh;">
+                <div class="col-3 mt-3" v-if="!isTouchDevice()">
+                    <el-steps
+                            v-if="!isTouchDevice()"
+                            :active="active"
+                            direction="vertical"
+                            finish-status="success"
+                            process-status="finish"
+                            style="height: 80vh;">
+                        <el-step
+                                v-for="item in statusConfig.filter(e => !e.parent)"
+                                @click="active = index"
+                                :title="item.text"
+                                :description="item.hasParent ? statusConfig.filter(e => e.parent && e.root == item.id).map(e => e.text).join('、') : ''">
+                        </el-step>
+                    </el-steps>
+                </div>
+                <div class="col-lg-9">
+                    <h1 class="font-weight-bold mt-5">{{ statusConfig[active].text }}</h1>
+                    <div class="operator-block" v-bind:style="{height: operatorSize}">
+<!--                        <div class="row" v-if="isTouchDevice()">-->
+<!--                            <div class="col-sm-3 mb-3" v-for="item in optionConfig.filter(e => e.status == active)">-->
+<!--                                <el-card class="w-100">-->
+<!--                                    <h5>{{ item.text }}</h5>-->
+<!--                                </el-card>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="row">
+                            <div class="col-12">
+                                <el-table
+                                        ref="multipleTable"
+                                        :data="optionConfig.filter(e => e.status == active)"
+                                        tooltip-effect="dark"
+                                        style="width: 100%"
+                                        @selection-change="handleSelectionChange"
+                                        v-if="!statusConfig.filter(e => e.id == active)[0].hasParent"
+                                >
+                                    <el-table-column
+                                            label=""
+                                            type="selection"
+                                            width="55">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="描述">
+                                        <template slot-scope="scope">{{ scope.row.text }}</template>
+                                    </el-table-column>
+                                </el-table>
+
+                                <div
+                                        v-for="(data, index) in statusConfig.filter(e => e.parent && e.root == active)"
+                                        :key="index"
+                                        class="w-100 sub-table mb-4">
+                                    <p>{{ data.text }}</p>
+                                    <el-table
+                                            ref="multipleTable"
+                                            :data="optionConfig.filter(e => e.status == data.id)"
+                                            tooltip-effect="dark"
+                                            style="width: 100%"
+                                            @selection-change="handleSelectionChange"
+                                    >
+                                        <el-table-column
+                                                type="selection"
+                                                width="55">
+                                        </el-table-column>
+                                        <el-table-column
+                                                label="描述">
+                                            <template slot-scope="scope">{{ scope.row.text }}</template>
+                                        </el-table-column>
+                                    </el-table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="control-block">
+                        <hr>
+                        <div class="control-button fbc">
+                            <div>
+                                <el-button type="danger" icon="el-icon-delete" @click="reset()">reset</el-button>
+                            </div>
+                            <div>
+                                <el-button
+                                        :disabled="active == 0"
+                                        @click="pageSwitch(-1)"
+                                        class="mr-3"
+                                        icon="el-icon-arrow-left"
+                                        type="primary" plain
+                                >
+                                    上一步
+                                </el-button>
+                                <el-button
+                                        :disabled="active >= statusConfig.filter(e => !e.parent).length - 1"
+                                        @click="pageSwitch(1)"
+                                        icon="el-icon-arrow-right"
+                                        type="primary" plain
+                                >
+                                    下一步
+                                </el-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mobileStatusBar" v-if="isTouchDevice()">
+                    <el-progress :percentage="25"></el-progress>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="./js/index.js"></script>
+<link rel="stylesheet" href="./css/style.css">
+</html>
