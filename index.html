@@ -32,7 +32,7 @@
                     <div class="col-sm-4 mb-4">
                         <p class="text-center">Chose City</p>
                         <hr>
-                        <el-select class="w-100" v-model="hospitalSelected.city" placeholder="請選擇">
+                        <el-select clearable class="w-100" v-model="hospitalSelected.city" placeholder="請選擇">
                             <el-option
                                     v-for="item in city"
                                     :key="item.id"
@@ -45,13 +45,13 @@
                         <p class="text-center">Chose Area</p>
                         <hr>
                         <el-select
-                            :disabled="hospitalSelected.city == null"
-                            class="w-100" v-model="hospitalSelected.area"
-                            :placeholder="hospitalSelected.city == null ? 'Chose city before chose it' : '請選擇'"
+                            :disabled="hospitalSelected.city === ''"
+                            class="w-100" v-model="hospitalSelected.area" clearable
+                            :placeholder="hospitalSelected.city === '' ? 'Chose city before chose it' : '請選擇'"
                         >
                             <el-option
-                                v-if="hospitalSelected.city != null"
-                                v-for="item in hospitalSelected.city != null ? (city.filter(e => e.id == hospitalSelected.city).at(0).areas) : []"
+                                v-if="hospitalSelected.city !== ''"
+                                v-for="item in hospitalSelected.city !== '' ? (city.filter(e => e.id == hospitalSelected.city).at(0).areas) : []"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">

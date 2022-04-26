@@ -34,11 +34,11 @@ let app = new Vue({
                 getResult: false
              },
              hospitalSelected: {
-                city: null,
-                area: null,
+                city: "",
+                area: "",
                 keyword: "",
                 hospitalType: [],
-                selected: null
+                selected: ""
              }
              // init: false
           }
@@ -68,6 +68,17 @@ let app = new Vue({
            }else {
                this.operatorSize = 'calc(100vh - ' + (window.$(".control-block").height() + 180) + 'px)'
            }
+           window.addEventListener("keydown", e => {
+               if(e.code == "ArrowUp") {
+                   if (this.active > 0) {
+                       this.pageSwitch(-1);
+                   }
+               } else if(e.code == "ArrowDown") {
+                   if (this.active < this.statusConfig.filter(e => !e.parent).length - 1) {
+                       this.pageSwitch(1)
+                   }
+               }
+           })
            // this.init = true;
        },
        methods: {
@@ -317,7 +328,7 @@ let app = new Vue({
           },
            getStatusRange() {
               return this.statusConfig.filter(e => {
-                  return e.id == this.active || (e.root != null && e.root == this.active)
+                  return e.id == this.active || (e.root != "" && e.root == this.active)
               }).map(e => e.id);
            },
           reset() {
@@ -330,14 +341,14 @@ let app = new Vue({
           getTargetHospital() {
               // find city
               let result = this.hospitals.filter(e => {
-                  if (e.location.length > 0 && this.hospitalSelected.city != null) {
+                  if (e.location.length > 0 && this.hospitalSelected.city !== "") {
                       return e.location[0] == this.hospitalSelected.city
                   }
                   return true;
               });
               // find area
-              if (this.hospitalSelected.city != null && this.hospitalSelected.area != null) {
-                  result = this.hospitals.filter(e => {
+              if (this.hospitalSelected.city !== "" && this.hospitalSelected.area !== "") {
+                  result = result.filter(e => {
                       if (e.location.length >= 2) {
                           return e.location[0] == this.hospitalSelected.city && e.location[1] == this.hospitalSelected.area
                       }
@@ -346,7 +357,7 @@ let app = new Vue({
               }
               // find hospital type
               if (this.hospitalSelected.hospitalType.length >= 1) {
-                  result = this.hospitals.filter(e => {
+                  result = result.filter(e => {
                       let find = false;
                       if (e.hospitalType.length >= 1) {
                           this.hospitalSelected.hospitalType.forEach(el => {
@@ -359,8 +370,8 @@ let app = new Vue({
                   });
               }
               // keyword
-              if (this.hospitalSelected.keyword != null && this.hospitalSelected.keyword != "") {
-                  result = this.hospitals.filter(e => {
+              if (this.hospitalSelected.keyword != null && this.hospitalSelected.keyword !== "") {
+                  result = result.filter(e => {
                       return
                         e.name.match(new RegExp(this.hospitalSelected.keyword, "ig")) ||
                         e.comment.match(new RegExp(this.hospitalSelected.keyword, "ig"));

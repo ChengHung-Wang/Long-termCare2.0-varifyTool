@@ -70,3 +70,8 @@ p {
 thead .el-checkbox__inner {
     display: none!important;
 }
+
+.el-dialog__body-mobile {
+    height: calc(100vh - 150px);
+    overflow-y: auto;
+}
