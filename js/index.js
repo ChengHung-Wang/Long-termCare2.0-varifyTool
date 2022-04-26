@@ -370,11 +370,14 @@ let app = new Vue({
                   });
               }
               // keyword
-              if (this.hospitalSelected.keyword != null && this.hospitalSelected.keyword !== "") {
+              if (this.hospitalSelected.keyword != "") {
                   result = result.filter(e => {
-                      return
-                        e.name.match(new RegExp(this.hospitalSelected.keyword, "ig")) ||
-                        e.comment.match(new RegExp(this.hospitalSelected.keyword, "ig"));
+                      // console.log( e.name.match(new RegExp(this.hospitalSelected.keyword, "ig")), e, this.hospitalSelected.keyword, e.name.match(new RegExp(this.hospitalSelected.keyword, "ig")) != null);
+                      let match = ((e.name.match(new RegExp(this.hospitalSelected.keyword, "ig")) != null) ||
+                          (e.comment.match(new RegExp(this.hospitalSelected.keyword, "ig")) != null));
+                      return match;
+                      // (e.name.match(new RegExp(this.hospitalSelected.keyword, "ig")) != null) ||
+                      // (e.comment.match(new RegExp(this.hospitalSelected.keyword, "ig")) != null);
                   });
               }
               return result;
