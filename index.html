@@ -21,8 +21,95 @@
 </head>
 <body>
     <div id="root">
+        <!--    Management    -->
         <el-dialog width="80%" title="Management" :visible.sync="managementStatus.rootWindow">
-
+            <!--     TODO: Management Feature        -->
+        </el-dialog>
+        <!--    Select Hospital    -->
+        <el-dialog title="Select Hospital" :visible.sync="finalStep.selectHospital" :fullscreen="isTouchDevice()" :width="isTouchDevice() ? '100%' : '60%'">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4 mb-4">
+                        <p class="text-center">Chose City</p>
+                        <hr>
+                        <el-select class="w-100" v-model="hospitalSelected.city" placeholder="請選擇">
+                            <el-option
+                                    v-for="item in city"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div class="col-sm-4 mb-4">
+                        <p class="text-center">Chose Area</p>
+                        <hr>
+                        <el-select
+                            :disabled="hospitalSelected.city == null"
+                            class="w-100" v-model="hospitalSelected.area"
+                            :placeholder="hospitalSelected.city == null ? 'Chose city before chose it' : '請選擇'"
+                        >
+                            <el-option
+                                v-if="hospitalSelected.city != null"
+                                v-for="item in hospitalSelected.city != null ? (city.filter(e => e.id == hospitalSelected.city).at(0).areas) : []"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div class="col-sm-4 mb-4">
+                        <p class="text-center">Chose Hospital Type</p>
+                        <hr>
+                        <el-select
+                                class="w-100" v-model="hospitalSelected.hospitalType"
+                                placeholder="請選擇" multiple>
+                            <el-option
+                                v-for="item in hospitalType"
+                                :key="item.id"
+                                :label="item.description"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p>Keyword: </p>
+                        <el-input v-model="hospitalSelected.keyword" placeholder="Keyword..."></el-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <h2>Result: </h2>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row mb-4" v-for="data in getTargetHospital()">
+                    <div class="col-12">
+                        <h4>{{ data.name }}</h4>
+                        <p class="m-0" v-if="data.address">Address: {{ data.address }}</p>
+                        <p class="m-0" v-if="data.url">URL: <a target="_blank" :href="data.url">{{ data.url }}</a></p>
+                        <p class="m-0" v-if="data.comment" v-html="'Note: ' + data.comment.replace('\n', '&nbsp;')"></p>
+                        <div v-if="data.phone.length" v-for="item in data.phone">
+                            <p class="m-0" v-html="(item.description + ': ' + item.number).replace('\n', '&nbsp;')"></p>
+                        </div>
+                        <div v-if="data.hospitalType.length >= 1">
+                            <p class="m-0">Services: </p>
+                            <el-tag class="mr-1" size="small" v-for="item in data.hospitalType">{{ hospitalType.filter(e => e.id == item).at(0).description }}</el-tag>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="finalStep.selectHospital = false">Cancel</el-button>
+                <el-button @click="finalStep.getResult = true" type="primary">Confirm</el-button>
+            </span>
+        </el-dialog>
+        <!--    Get Result    -->
+        <el-dialog width="80%" title="Get result" :visible.sync="finalStep.getResult" :fullscreen="isTouchDevice()" :width="isTouchDevice() ? '100%' : '60%'">
+            <!--     TODO 01: Get result        -->
+            <h3>Comming soon</h3>
         </el-dialog>
         <div class="container">
             <div class="row fcc" style="height: 100vh;">
@@ -119,15 +206,23 @@
                                         icon="el-icon-arrow-left"
                                         type="primary" plain
                                 >
-                                    上一步
+                                    Previous
                                 </el-button>
                                 <el-button
-                                        :disabled="active >= statusConfig.filter(e => !e.parent).length - 1"
+                                        v-if="active < statusConfig.filter(e => !e.parent).length - 1"
                                         @click="pageSwitch(1)"
                                         icon="el-icon-arrow-right"
                                         type="primary" plain
                                 >
-                                    下一步
+                                    Next
+                                </el-button>
+                                <el-button
+                                        v-if="active >= statusConfig.filter(e => !e.parent).length - 1"
+                                        icon="el-icon-printer"
+                                        type="primary" plain
+                                        @click="finalStep.selectHospital = true"
+                                >
+                                    Select Hospital
                                 </el-button>
                             </div>
                         </div>

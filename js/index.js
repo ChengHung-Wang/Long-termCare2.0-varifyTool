@@ -7,6 +7,9 @@ let app = new Vue({
              userData: [],
              optionConfig: optionConfig,
              statusConfig: statusConfig,
+             hospitalType: hospitalType,
+             hospitals: hospitals,
+             city: city,
              operatorSize: 0,
              multipleSelection: [],
              selected: new Array(statusConfig.length).fill([]),
@@ -26,6 +29,17 @@ let app = new Vue({
                      "editOption"
                  ]
              },
+             finalStep: {
+                selectHospital: false,
+                getResult: false
+             },
+             hospitalSelected: {
+                city: null,
+                area: null,
+                keyword: "",
+                hospitalType: [],
+                selected: null
+             }
              // init: false
           }
        },
@@ -312,6 +326,64 @@ let app = new Vue({
               for (let index = 0; index < this.statusConfig.length; index ++) {
                   this.selected[index] = [];
               }
+          },
+          getTargetHospital() {
+              // find city
+              let result = this.hospitals.filter(e => {
+                  if (e.location.length > 0 && this.hospitalSelected.city != null) {
+                      return e.location[0] == this.hospitalSelected.city
+                  }
+                  return true;
+              });
+              // find area
+              if (this.hospitalSelected.city != null && this.hospitalSelected.area != null) {
+                  result = this.hospitals.filter(e => {
+                      if (e.location.length >= 2) {
+                          return e.location[0] == this.hospitalSelected.city && e.location[1] == this.hospitalSelected.area
+                      }
+                      return false;
+                  })
+              }
+              // find hospital type
+              if (this.hospitalSelected.hospitalType.length >= 1) {
+                  result = this.hospitals.filter(e => {
+                      let find = false;
+                      if (e.hospitalType.length >= 1) {
+                          this.hospitalSelected.hospitalType.forEach(el => {
+                              if (e.hospitalType.indexOf(el) != -1) {
+                                  find = true;
+                              }
+                          });
+                      }
+                      return find;
+                  });
+              }
+              // keyword
+              if (this.hospitalSelected.keyword != null && this.hospitalSelected.keyword != "") {
+                  result = this.hospitals.filter(e => {
+                      return
+                        e.name.match(new RegExp(this.hospitalSelected.keyword, "ig")) ||
+                        e.comment.match(new RegExp(this.hospitalSelected.keyword, "ig"));
+                  });
+              }
+              return result;
+            // return this.hospitals.filter(e => {
+            //     if (
+            //         this.hospitalSelected.keyword != null &&
+            //         this.hospitalSelected.keyword != "" &&
+            //         e.match(this.hospitalSelected.keyword) &&
+            //         e.hospitalType.filter(el => this.hospitalSelected.hospitalType.indexOf(el.id) != -1)
+            //     ) {
+            //         return true;
+            //     }
+            //     let city = e.location[0];
+            //     let area = e.location[1];
+            //
+            //     if (city == this.selectHospital.city && this.hospitalSelected.area == area) {
+            //         return true;
+            //     }
+            //     return false;
+            // })
           }
        },
        watch: {

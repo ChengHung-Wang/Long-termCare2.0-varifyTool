@@ -318,11 +318,6 @@ let optionConfig = [
     text: "重症居家",
     status: 12,
     unique: false
-  },
-  {
-    text: "台北市",
-    status: 13,
-    unique: true
   }
 ];
 
@@ -404,11 +399,369 @@ let statusConfig = [
     text: "轉介團隊",
     parent: true,
     root: 10
+  }
+];
+
+let city = [
+  {
+    id: 0,
+    name: "台北市",
+    areas: [
+      {
+        id: 0,
+        name: "汐止區"
+      },
+      {
+        id: 1,
+        name: "萬華區"
+      },
+      {
+        id: 2,
+        name: "士林區"
+      }
+    ]
   },
   {
-    id: 13,
-    text: "場所",
-    parent: true,
-    root: 10
+    id: 1,
+    name: "新北市",
+    areas: [
+      {
+        id: 0,
+        name: "淡水區"
+      },
+      {
+        id: 1,
+        name: "永和區"
+      }
+    ]
+  }
+];
+
+let hospitalType = [
+  {
+    id: 0,
+    description: "醫院"
   },
+  {
+    id: 1,
+    description: "居護所"
+  },
+  {
+    id: 2,
+    description: "安養護機構"
+  },
+  {
+    id: 3,
+    description: "居家醫療團隊"
+  },
+  {
+    id: 4,
+    description: "一般重症居家"
+  }
+]
+
+let hospitals = [
+  {
+    id: 0,
+    name: "三軍總醫院",
+    address: "",
+    location: [0],
+    url: "www.hospital.com",
+    phone: [
+      {
+        number: "02-87923311\n 分機17912",
+        description: "病房電話"
+      },
+      {
+        number: "02-87923311分機88200\n 〈白天上班時間〉",
+        description: "居家電話"
+      }
+    ],
+    hospitalType: [0],
+    comment: "家醫科許馨文、蔡秉芸醫師"
+  },
+  {
+    id: 1,
+    name: "永和耕莘醫院",
+    address: "",
+    location: [1, 1],
+    url: "http://newreg.cthyh.org.tw/new_CthWebReg/frame05.html",
+    phone: [
+      {
+        number: "(02)66373658或59；先電話跟居家交班後，傳真資料給居家護理師。",
+        description: "病房電話"
+      },
+      {
+        number: "89253023",
+        description: "病房電話(傳真)"
+      }
+    ],
+    hospitalType: [0, 3],
+    comment: "家醫科許馨文、蔡秉芸醫師"
+  },
+  {
+    id: 2,
+    name: "私立愛愛院",
+    address: "臺北市萬華區大理街175巷27號",
+    location: [0, 1],
+    url: "",
+    phone: [
+      {
+        number: "02-2306-0493",
+        description: "電話"
+      },
+      {
+        number: "02-2308-4057",
+        description: "傳真"
+      }
+    ],
+    hospitalType: [2],
+    comment: "就地善終"
+  },
+  {
+    id: 3,
+    name: "耘霈居家護理所",
+    address: "淡水區學府路136巷16號1樓",
+    location: [1, 0],
+    url: "",
+    phone: [
+      {
+        number: "02-87923311\n 分機17912",
+        description: "病房電話"
+      },
+      {
+        number: "02-87923311分機88200\n 〈白天上班時間〉",
+        description: "居家電話"
+      }
+    ],
+    hospitalType: [2],
+    comment: "安寧?"
+  },
+  {
+    id:4,
+    name:"新光醫療財團法人新光吳火獅紀念醫院",
+    address:"臺北市士林區文昌路95號及士商路51號1至7樓53、55號",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        number:"02 -28332211",
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:5,
+    name:"士林錦禾中醫診所",
+    address:"臺北市士林區士東路16號（實際使用：1樓）、18號2樓",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        number:"02 -88665128",
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:6,
+    name:"悅展中醫診所",
+    address:"臺北市士林區延平北路五段243號",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        number:"02 -28128132",
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:7,
+    name:"李世澤小兒科內科診所",
+    address:"臺北市士林區社子街67號",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        number:"02 -28111472",
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:8,
+    name:"宜寧居家護理所",
+    address:"臺北市士林區中正路436號11樓",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        number:"02-28353449",
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:9,
+    name:"新光醫療財團法人附設新",
+    address:"臺北市士林區文昌路95號",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        number:"02-28332211轉2600、2601、2483",
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:10,
+    name:"臺北市立聯合醫院附設陽",
+    address:"\"臺北市士林區雨聲街105號9樓/6樓",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        number:"02-28353456轉6372、5211",
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:11,
+    name: "不明診所",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:12,
+    name:"可馨居家護理所",
+    address:"\"臺北市大安區忠孝東路四段162號9",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        number:"978278750",
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:13,
+    name: "不明診所",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  },
+  {
+    id:14,
+    name:"粱耳鼻喉科診所",
+    address:"臺北市士林區社正路12－1號",
+    location:[
+      0,
+      2
+    ],
+    url:"",
+    phone:[
+      {
+        number:"02 -28168456",
+        description:"電話"
+      }
+    ],
+    hospitalType:[
+      0,
+      4
+    ],
+    comment:""
+  }
 ];
