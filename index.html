@@ -109,8 +109,20 @@
         <!--    Get Result    -->
         <el-dialog width="80%" title="Get result" :visible.sync="finalStep.getResult" :fullscreen="isTouchDevice()" :width="isTouchDevice() ? '100%' : '60%'">
             <!--     TODO 01: Get result        -->
-            <h3>Comming soon</h3>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Result: {{ getResult() }}</h3>
+                        <hr>
+                    </div>
+                    <div class="col-sm-6" v-for="item in statusConfig">
+                        <h5>{{ item.text }}</h5>
+                        <p>{{ (JSON.parse(JSON.stringify(selected))[item.id]).map(e => e.text).join(", ") }}</p>
+                    </div>
+                </div>
+            </div>
         </el-dialog>
+
         <div class="container">
             <div class="row fcc" style="height: 100vh;">
                 <div class="col-3 mt-3" v-if="!isTouchDevice()">

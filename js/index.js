@@ -126,11 +126,6 @@ let app = new Vue({
               });
           },
           handleSelectionChange(val) {
-              // group by status
-              // val only include one form
-              // **************************
-              // version3
-              // **************************
               let multipleTable = this.$refs.multipleTable;
               let statusRange = Array.from(new Set(val.map(e => e.status)));
               if (val.length > 0) {
@@ -176,151 +171,8 @@ let app = new Vue({
                       }
                   }
               }
-
-              // // **************************
-              // // version2
-              // // **************************
-              // let data = new Array(this.statusConfig.length).fill([]);
-              // // let multipleTable = this.$refs.multipleTable;
-              //
-              // val.forEach(item => {
-              //     data[item.status].push(item);
-              // })
-              // console.log(val);
-              // // verify every status
-              // data.forEach((statusSelected, statusIndex) => {
-              //     let lastSelect = statusSelected.at(-1);
-              //     if (lastSelect == undefined) {
-              //         return true; // continue
-              //     }
-              //     if (lastSelect.unique) {
-              //         statusSelected.forEach((row, rowIndex) => {
-              //             let checked = (row.status == lastSelect.status && row.text == lastSelect.text && row.unique);
-              //             row.remove = !checked;
-              //             if (multipleTable.length) {
-              //                 multipleTable.forEach(thisTable => { // parent branch loop
-              //                     // undo selected option when last selected item is unique
-              //                     if (thisTable.data.length > 0 && thisTable.data.at(0).status == lastSelect.status) {
-              //                         thisTable.toggleRowSelection(row, checked);
-              //                     }
-              //                 })
-              //             } else {
-              //                 // undo selected option when last selected item is unique
-              //                 if (multipleTable.data.length > 0 && multipleTable.data.at(0).status == lastSelect.status) {
-              //                     multipleTable.toggleRowSelection(row, checked);
-              //                 }
-              //             }
-              //             // update single row info
-              //             statusSelected[rowIndex] = row;
-              //         });
-              //     }else {
-              //         // Check whether the selected option has a radio option
-              //         statusSelected.forEach((row, rowIndex) => {
-              //             row.remove = false;
-              //             if (row.unique) {
-              //                 if (multipleTable.length) {
-              //                     multipleTable.forEach(thisTable => { // have parent branch loop
-              //                         if (thisTable.data.length > 0 && thisTable.data.at(0).status == lastSelect.status) {
-              //                             thisTable.toggleRowSelection(row, false);
-              //                         }
-              //                     })
-              //                 }else {
-              //                     if (multipleTable.data.length > 0 && multipleTable.data.at(0).status == lastSelect.status) {
-              //                         multipleTable.toggleRowSelection(row, false);
-              //                     }
-              //                 }
-              //                 row.remove = true;
-              //             }
-              //             // update single row info
-              //             statusSelected[rowIndex] = row;
-              //         })
-              //     }
-              //     // update all table status
-              //     data[statusIndex] = statusSelected;
-              // })
-              //
-              // let result = [];
-              //
-              // data.map(e => this.selectedUnique(e)).forEach((status, index) => {
-              //     if (this.getStatusRange().indexOf(index) != -1) {
-              //         status.forEach(row => {
-              //             if (! row.remove) {
-              //                 result.push(row);
-              //             }
-              //         })
-              //     }
-              // })
-              // this.multipleSelection = Array.from(new Set(result.map(e => {
-              //     return {
-              //         status: e.status,
-              //         text: e.text,
-              //         unique: e.unique
-              //     }
-              // })));
-              // console.log(result, this.multipleSelection, data, "result, multiple, data");
-
-              // // **************************
-              // // version1
-              // // **************************
-              // let last = val;
-              // last = JSON.parse(JSON.stringify((last))).pop();
-              // let hasUni = false;
-              // let uniItem = null;
-              // val.forEach(e => {
-              //     if (e.unique) {
-              //         hasUni = true;
-              //         uniItem = e;
-              //     }
-              // })
-              // if (val.length >= 1 && last.unique) {
-              //     val.forEach(e => {
-              //         console.log(this.$refs.multipleTable);
-              //         if (this.$refs.multipleTable.length) {
-              //             this.$refs.multipleTable.forEach(thisTable => {
-              //                 thisTable.toggleRowSelection(e, (e.text == last.text && e.status == last.status))
-              //             });
-              //         }else {
-              //             this.$refs.multipleTable.toggleRowSelection(e, (e.text == last.text && e.status == last.status))
-              //         }
-              //     })
-              // }else if (hasUni && val.length >= 1){
-              //     val.forEach(e => {
-              //         if (this.$refs.multipleTable.length) {
-              //             this.$refs.multipleTable.forEach(thisTable => {
-              //                 thisTable.toggleRowSelection(e, !e.unique)
-              //             });
-              //         }else {
-              //             this.$refs.multipleTable.toggleRowSelection(e, !e.unique)
-              //         }
-              //     })
-              // }
-
-              //
-              // if (count > 0) {
-              //     this.$refs.multipleTable.clearSelection();
-              //     //this.$refs.multipleTable.toggleRowSelection(uniItem, true);
-              // }
-
-              //this.multipleSelection = val;
           },
           pageSwitch(offset) {
-              // // **************************************************************************
-              // // remove in selected update when handleSelectionChange at version3
-              // // **************************************************************************
-
-              // if (this.statusConfig.filter(e => e.))
-              // let cache = new Array(this.statusConfig.length).fill([]);
-              // this.multipleSelection.forEach(e => {
-              //     cache[e.status].push(e);
-              // })
-              // cache.forEach((statusSelected, statusIndex) => {
-              //     if (
-              //         statusSelected.length > 0 &&
-              //         this.getStatusRange().indexOf(statusIndex) != -1
-              //     ) {
-              //         this.selected[statusIndex] = statusSelected;
-              //     }
-              // })
               this.active = this.statusConfig.filter(e => !e.parent)[
                   statusConfig.filter(e => !e.parent).map(e => e.id).indexOf(this.active) + offset
               ].id;
@@ -398,6 +250,9 @@ let app = new Vue({
             //     }
             //     return false;
             // })
+          },
+          getResult() {
+              return "判斷晚點寫。"
           }
        },
        watch: {
